@@ -23,4 +23,4 @@ jobs:
           server-name: infinite-jest.database.windows.net
           connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
           # uses dacpac to deploy database schema
-          # dacpac-package: './Database/dacpac/bus-db.dacpac'
+          dacpac-package: './Database/dacpac/infiniteJestDAC.dacpac'
