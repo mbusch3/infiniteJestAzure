@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "mssql": "^7.3.0",
+    "tedious": "^14.0.0"
+  },
+  "name": "infinitejestazure",
+  "description": "Basic Azure functionality: Database and Static Web App with API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbusch3/infiniteJestAzure.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbusch3/infiniteJestAzure/issues"
+  },
+  "homepage": "https://github.com/mbusch3/infiniteJestAzure#readme"
+}

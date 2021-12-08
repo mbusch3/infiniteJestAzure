@@ -5,10 +5,29 @@
 </head>
 <body>
     Welcome to Infinite Jest! You found the site!
-    I wonder how fast this thing can update... Vue maybe...
+    I wonder how fast this thing can update...
     <div id="app">
         {{ message }}
     </div>
+    <div id="users-dropdown">
+        Dropdown goes here
+    </div>
+    <template>
+        <div>{{ message }}</div>
+    </template>
 </body>
-
-<script src="infiniteJest.js"></script>
+  
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello, Infinite Jest on Vue!'
+        },
+        async mounted() {
+            const apiMessage  = await fetch("/api/GetUsers");
+            this.message = apiMessage && apiMessage.body
+                ? JSON.stringify(apiMessage)
+                : "Can't tell.";
+        }
+    });
+</script>
