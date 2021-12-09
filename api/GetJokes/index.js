@@ -1,24 +1,69 @@
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
 
     const user = (req.query.user || (req.body && req.body.user));
     const pull = (req.query.pull || (req.body && req.body.pull));
-    let responseMessage = '';
+
+    let queryString = '';
+
+    // Yes, I am fully aware that the queries below are not SQL Injection-proof.
     if (!user) {
-        responseMessage = "You just want all the jokes, don't you?";
+        queryString = "SELECT * FROM Jokes";
     }
     else if (pull && pull == 'mine') {
-        responseMessage = "You want all the jokes that you've submitted.";
+        queryString = "SELECT * FROM Jokes WHERE UserId = " + user;
     }
     else if (pull && pull == 'others') {
-        responseMessage = "You want to see everyone else's jokes.";
+        queryString = "SELECT * FROM Jokes WHERE UserId != " + user;
     }
     else {
-        responseMessage = "I have no idea what you want, but I know who you are.";
+        queryString = "SELECT * FROM Jokes WHERE UserId = " + user;
     }
 
+    const sql = require('mssql');
+
+    const AZURE_CONNECTION_STRING = process.env["DB_CONNECTION_STRING"];
+
+    let connection = new Promise(function(resolve, reject) {
+        sql.connect(AZURE_CONNECTION_STRING, function(error) {
+            if (error) { 
+                reject("Database connection failed");
+                throw error;
+            } else {
+                resolve("Database connected");
+            }
+        });
+    });
+    console.log(await connection);
+
+    // let databaseQuery = new Promise(function(resolve, reject){
+    //     new sql.Request().query(queryString, function (error, results) {
+    //         if (error) {
+    //             reject("Database query failed");
+    //             throw error;
+    //         } else {
+    //             resolve(JSON.stringify(results.recordset));
+    //         }
+    //     });
+    // });
+    
+    let databaseQuery = new Promise(function(resolve, reject){
+        new sql.Request().query(queryString, function (error, results) {
+            if (error) {
+                reject("Database query failed");
+                throw error;
+            } else {
+                resolve(JSON.stringify(results.recordset));
+            }
+        });
+    });
+    
+    console.log(await databaseQuery);
+    
     context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: responseMessage
+        status: 200,
+        body: await databaseQuery
     };
+
+    context.done();
+    
 }

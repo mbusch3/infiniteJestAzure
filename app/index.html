@@ -24,10 +24,9 @@
             users: []
         },
         async mounted() {
-            var apiMessage = await(await fetch("/api/GetUsers"));
-            this.message = apiMessage.text
-                ? apiMessage.text
-                : apiMessage;
+            let fetchedData = await(fetch("/api/GetJokes"));
+            let apiMessage = await fetchedData.text();
+            this.message = apiMessage;
         }
     });
 </script>
