@@ -47,25 +47,21 @@ module.exports = async function (context, req) {
     console.log(await connection);
 
     let databaseQuery = new Promise(function(resolve, reject){
-        var userQuery = new sql.Request();
-        var queryResults = userQuery.query("SELECT * FROM Users", function (error, results) {
-            console.log("Here's what I found in the database:\n");
-            console.log(results.recordset);
+        new sql.Request().query("SELECT * FROM Users", function (error, results) {
             if (error) {
                 reject("Database query failed");
                 throw error;
             } else {
                 resolve(JSON.stringify(results.recordset));
-            } 
+            }
         });
     });
     
-    console.log("Here's what's outside of the query:\n");
     console.log(await databaseQuery);
 
     context.res = {
         text: await databaseQuery
-    }
+    };
 
 
 
@@ -165,7 +161,7 @@ module.exports = async function (context, req) {
 
 
     
-    // Quick connection test
+    //Quick connection test
     // context.res = {
     //     text: "Hello from the API"
     // };

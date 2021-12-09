@@ -11,9 +11,10 @@
       ]
     },
     {
-      "type": "http",
+      "name": "$return",
+      "type": "blob",
       "direction": "out",
-      "name": "res"
+      "path": "output-container"
     }
   ]
 }

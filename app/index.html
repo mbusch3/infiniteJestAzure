@@ -6,7 +6,7 @@
 <body>
     Welcome to Infinite Jest! You found the site!
     <br />
-    We're attempting to pull data from the database here...<br /><br />
+    We're attempting to pull data from the database here:<br /><br />
     <div id="app">
         Full message:{{ message }}<br /><br /><br />
         <div id="users-dropdown">
@@ -24,8 +24,10 @@
             users: []
         },
         async mounted() {
-            var apiMessage = JSON.stringify(await fetch("/api/GetUsers"));
-            this.message = apiMessage;
+            var apiMessage = await(await fetch("/api/GetUsers"));
+            this.message = apiMessage.text
+                ? apiMessage.text
+                : apiMessage;
         }
     });
 </script>
