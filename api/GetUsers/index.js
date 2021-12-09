@@ -1,22 +1,72 @@
+var allUsers = [];
+
 module.exports = async function (context, req) {
 
-    // VERSION 1 - What am I missing to make this readable?
     // const sql = require('mssql');
 
     // const AZURE_CONNECTION_STRING = process.env["DB_CONNECTION_STRING"];
+    // allUsers = [];
 
-    // sql.connect(AZURE_CONNECTION_STRING, function(error) {
-    //     if (error) throw error;
-    //     console.log("Hello, there!");
+    // let connectionPromise = new Promise(function(resolve, reject) {
+    //     sql.connect(AZURE_CONNECTION_STRING);
     //     var userQuery = new sql.Request();
-    //     userQuery.query("SELECT * FROM Users FOR JSON PATH", function (error, results) {
-    //         if (error) throw error;
-    //         console.log(results);
-    //         context.res = {
-    //             body: results
-    //         }
-    //     });
+    //     var results = userQuery.query("SELECT * FROM Users FOR JSON PATH", function (err) { if (err) throw err; });
+    //     if(results){
+    //         resolve(results);
+    //     }
+    //     else {
+    //         reject(null);
+    //     }
     // });
+    
+    // connectionPromise.then(
+    //     function(results) { context.res(results); },
+    //     function(error) { throw error; }
+    // );
+        
+    // context.res.json({
+    //     text: allUsers,
+    // });
+
+
+    // VERSION 1 - What am I missing to make this readable?
+    const sql = require('mssql');
+
+    const AZURE_CONNECTION_STRING = process.env["DB_CONNECTION_STRING"];
+
+    let connection = new Promise(function(resolve, reject) {
+        sql.connect(AZURE_CONNECTION_STRING, function(error) {
+            if (error) { 
+                reject("Database connection failed");
+                throw error;
+            } else {
+                resolve("Database connected");
+            }
+        });
+    });
+    console.log(await connection);
+
+    let databaseQuery = new Promise(function(resolve, reject){
+        var userQuery = new sql.Request();
+        var queryResults = userQuery.query("SELECT * FROM Users", function (error, results) {
+            console.log("Here's what I found in the database:\n");
+            console.log(results.recordset);
+            if (error) {
+                reject("Database query failed");
+                throw error;
+            } else {
+                resolve(JSON.stringify(results.recordset));
+            } 
+        });
+    });
+    
+    console.log("Here's what's outside of the query:\n");
+    console.log(await databaseQuery);
+
+    context.res = {
+        text: await databaseQuery
+    }
+
 
 
     // VERSION 2
@@ -27,7 +77,7 @@ module.exports = async function (context, req) {
     //   authentication: {
     //     options: {
     //       userName: "cloudadmin",
-    //       password: "**********"
+    //       password: "Outs1der"
     //     },
     //     type: "default"
     //   },
@@ -116,8 +166,8 @@ module.exports = async function (context, req) {
 
     
     // Quick connection test
-    context.res = {
-        body: "Hello from the API"
-    };
+    // context.res = {
+    //     text: "Hello from the API"
+    // };
 
 }
