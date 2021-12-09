@@ -60,9 +60,11 @@ module.exports = async function (context, req) {
     console.log(await databaseQuery);
 
     context.res = {
-        text: await databaseQuery
+        status: 200,
+        body: await databaseQuery
     };
 
+    context.done();
 
 
     // VERSION 2

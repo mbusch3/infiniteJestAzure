@@ -8,9 +8,21 @@
     <br />
     We're attempting to pull data from the database here:<br /><br />
     <div id="app">
-        Full message:{{ message }}<br /><br /><br />
+        Full message: {{ message }}<br /><br /><br />
+
         <div id="users-dropdown">
-            Dropdown goes here
+            <div v-for="user in users">
+                {{user.Name}} ({{ user.Id }}) <br><br>
+
+            </div>
+        </div>
+        <br><br><br>
+
+        <div id="jokes-dropdown">
+            <div v-for="joke in jokes">
+                {{joke.SetUp}} <br> {{ joke.Payoff }} <br><br>
+
+            </div>
         </div>
     </div>
 
@@ -20,13 +32,16 @@
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello, Infinite Jest on Vue!',
-            users: []
+            message: 'Loading Users and Jokes...',
+            users: [],
+            jokes: [],
         },
         async mounted() {
-            let fetchedData = await(fetch("/api/GetJokes"));
-            let apiMessage = await fetchedData.text();
-            this.message = apiMessage;
+            let fetchedUsers = await (await (fetch("http://localhost:7071/api/GetUsers"))).text();
+            this.users = JSON.parse(fetchedUsers);
+            let fetchedJokes = await (await (fetch("http://localhost:7071/api/GetJokes"))).text();
+            this.jokes = JSON.parse(fetchedJokes);
+            this.message = "Loaded!";
         }
     });
 </script>
