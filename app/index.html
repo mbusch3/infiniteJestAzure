@@ -37,7 +37,7 @@
             jokes: [],
         },
         async mounted() {
-            let URL = process.env["HOST_URL"];
+            let URL = "https://infinitejest-apigateway.azure-api.net/";
             let fetchedUsers = await (await (fetch(URL + "api/GetUsers"))).text();
             this.users = JSON.parse(fetchedUsers);
             let fetchedJokes = await (await (fetch(URL + "api/GetJokes"))).text();
