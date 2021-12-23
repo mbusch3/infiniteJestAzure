@@ -34,17 +34,6 @@ module.exports = async function (context, req) {
         });
     });
     console.log(await connection);
-
-    // let databaseQuery = new Promise(function(resolve, reject){
-    //     new sql.Request().query(queryString, function (error, results) {
-    //         if (error) {
-    //             reject("Database query failed");
-    //             throw error;
-    //         } else {
-    //             resolve(JSON.stringify(results.recordset));
-    //         }
-    //     });
-    // });
     
     let databaseQuery = new Promise(function(resolve, reject){
         new sql.Request().query(queryString, function (error, results) {
