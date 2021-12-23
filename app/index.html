@@ -37,9 +37,10 @@
             jokes: [],
         },
         async mounted() {
-            let fetchedUsers = await (await (fetch("http://localhost:7071/api/GetUsers"))).text();
+            let URL = process.env["HOST_URL"];
+            let fetchedUsers = await (await (fetch(URL + "api/GetUsers"))).text();
             this.users = JSON.parse(fetchedUsers);
-            let fetchedJokes = await (await (fetch("http://localhost:7071/api/GetJokes"))).text();
+            let fetchedJokes = await (await (fetch(URL + "api/GetJokes"))).text();
             this.jokes = JSON.parse(fetchedJokes);
             this.message = "Loaded!";
         }
